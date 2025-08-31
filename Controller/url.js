@@ -3,7 +3,7 @@ const URL=require('../Models/url')
 
 async function getShortURL(req,res) {
     const body=req.body
-    console.log(body)
+    console.log(body.url)
     if(!body.url)return res.status(400).json({msg:"URL is required"})
     const shortId=shortid.generate()
     await URL.create({
@@ -11,10 +11,10 @@ async function getShortURL(req,res) {
         redirectUrl:body.url,
         visitedHistory:[]
     })
-    return res.send({id:shortId})
+    return res.render("home",{id:shortId})
 }
 async function getAnalytics(req,res){
-    const shortId=req.params.id;
+    const shortId=req.params.shortid;
     const result=await URL.findOne({shortId})
     return res.json({
         totalclicks:result.visitedHistory.length,
